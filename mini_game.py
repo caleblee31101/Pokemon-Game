@@ -1,4 +1,34 @@
 import random
+import csv
+
+
+def data_modifier():
+    """Takes the data from the PokeList and transforms it into a form that is more effiecient for battle and only
+    includes stats that are necessary for battle
+    Returns a list that contains these stats for all the pokemon from which a pokemon will be randomly selected."""
+    adjusted_list = []
+    removables = []
+    available_pokemon = []
+    # Open the file and set it equal to the name data
+    with open('PokeList_v2-1.csv', 'r') as data:
+        given = csv.reader(data)
+        # After using the csv reader to split the data, we set that data into a list form
+        for pokemon in given:
+            available_pokemon.append(pokemon)
+            for index in range(1, len(available_pokemon)):
+                pokemon = available_pokemon[index]
+                if len(pokemon) != 10:
+                    removables.append(index)
+                else:
+                    # Correctly formats the given stats into a form that is easily useable
+                    pokemon.pop(0)
+                    pokemon.pop(4)
+                    pokemon[1] = int(pokemon[1])
+                    pokemon[2] = int(pokemon[2])
+                    pokemon[3] = int(pokemon[3])
+                    pokemon[5] = int(pokemon[5])
+        return available_pokemon
+
 
 my_pokemon = ['Charmander', 270, 5, 'Ember', 50, 0, 'Fire']
 
@@ -39,12 +69,12 @@ def minigame(current_pokemon):
     # pokemon_call_number = random.randint(0, 151)
     # Somehow obtain the list of the pokemon and use the call number to call the pokemon that we want.
     # Format of the list will
-    dataList = [['Bulbasaur', 200, 300, 5, 'Absorb', 50, 0, 'Grass'],
-                ['Ivysaur', 300, 400, 5, 'Vine Whip', 70, 1, 'Grass']]
+
+    dataList = data_modifier()
 
     # weaknesses = {'Grass': 'Fire', 'Fire': 'Water'}
 
-    random_pok = dataList[random.randint(0, 1)]
+    random_pok = dataList[random.randint(0, 150)]
     random_pokcp = random.randint(random_pok[1], random_pok[2])
     # index(0 = HP, 1 = Name, 2 = CP, 3 = Attack name, 4 = Damage, 5 = Type, 6 = Max HP)
     current_pokemon = [int(my_pokemon[1] / 2), my_pokemon[0], my_pokemon[1], my_pokemon[3], my_pokemon[4],
@@ -58,8 +88,10 @@ def minigame(current_pokemon):
     #     current_pokemon[4] *= 1.5
     z = 0
     i = 0
-    print(current_pokemon)
-    print(random_pokemon)
+    print(current_pokemon[1], 'vs', random_pokemon[1])
+    health_printer(current_pokemon, random_pokemon)
+    print('If you can defeat the encountered pokemon you capture it, you have two options on each turn, attack or heal:'
+          ' Enter 1 to attack and 2 to heal')
     while z == 0:  # cp/5] > 0 and random_pokemon[0] > 0:
         if i % 2 == 0:
             print('Choose your move:\n'
@@ -115,9 +147,7 @@ def minigame(current_pokemon):
             x = 10
     else:
         print('You lost, sorry better luck next time, you also get 0 candies.')
-
-    return random_pokemon, x
+    return random_pokemon
 
 
 minigame(my_pokemon)
-
