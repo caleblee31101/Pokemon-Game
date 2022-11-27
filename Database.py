@@ -22,7 +22,7 @@ class Database:
                 moveDMG = int(pokeData[7])
                 evolutionNum = int(pokeData[8])
                 pokeType = pokeData[9]
-                self.pokemon = Pokemon(name, minCP, maxCP, level, candy, moveName, moveDMG, evolutionNum, pokeType)
+                self.pokemon = Pokemon(name, minCP, maxCP, level, candy, moveName, moveDMG, evolutionNum, pokeType, minCP)
                 self.__PokemonList.append(self.pokemon)
     def at(self, index):
         return self.__PokemonList[index]

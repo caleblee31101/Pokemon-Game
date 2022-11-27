@@ -30,9 +30,6 @@ def data_modifier():
         return available_pokemon
 
 
-my_pokemon = ['Charmander', 270, 5, 'Ember', 50, 0, 'Fire']
-
-
 def attack(attacker, defender):
     """Takes an attacking pokemon and a defending pokemon (which are both in the form a of a list with stats)
     Returns the health of the defending pokemon.
@@ -73,9 +70,11 @@ def minigame(current_pokemon):
     dataList = data_modifier()
 
     # weaknesses = {'Grass': 'Fire', 'Fire': 'Water'}
-
+    my_pokemon = current_pokemon
     random_pok = dataList[random.randint(0, 150)]
     random_pokcp = random.randint(random_pok[1], random_pok[2])
+    result_pokemon = random_pok + [random_pokcp]
+    result_pokemon.insert(4, 0)
     # index(0 = HP, 1 = Name, 2 = CP, 3 = Attack name, 4 = Damage, 5 = Type, 6 = Max HP)
     current_pokemon = [int(my_pokemon[1] / 2), my_pokemon[0], my_pokemon[1], my_pokemon[3], my_pokemon[4],
                        my_pokemon[6], int(my_pokemon[1] / 2)]
@@ -138,16 +137,40 @@ def minigame(current_pokemon):
     if random_pokemon[0] <= 0:
         random_pokemon[0] = 0
         print(f'You won the round and captured {random_pokemon[1]}')
-        x = random.randint(0, 2)
-        if x == 0:
-            x = 3
-        elif x == 1:
-            x = 5
-        else:
-            x = 10
     else:
         print('You lost, sorry better luck next time, you also get 0 candies.')
-    return random_pokemon
+        return False
+    return result_pokemon
 
 
-minigame(my_pokemon)
+def candy_gen():
+    x = random.randint(0, 2)
+    if x == 0:
+        x = 3
+    elif x == 1:
+        x = 5
+    else:
+        x = 10
+    return x
+
+
+def level_up(candies, level):
+    x = 1
+    buff = 0
+    while x == 1:
+        if level < 31 and candies >= 1:
+            level += 1
+            candies -= 1
+            buff += 1
+        elif level < 40 and candies >= 2:
+            level += 1
+            candies -= 2
+            buff += 2
+        elif level == 40:
+            print('ALREADY MAX LEVEL')
+            x = 0
+        else:
+            x = 0
+            if buff == 0:
+                print('You do not have enough candies for an upgrade')
+    return buff, level, candies

@@ -1,9 +1,14 @@
+import random
 class Pokemon:
-    def __init__(self, name, minCP, maxCP, level, candy, moveName, moveDMG, evolutionNum, pokeType):
+    def __init__(self, name, minCP, maxCP, level, candy, moveName, moveDMG, evolutionNum, pokeType, currCP):
         self.name = name
         self.minCP = minCP
         self.maxCP = maxCP
-        self.currCP = minCP
+        if currCP == minCP:
+            self.currCP = random.randint(int(minCP), int(maxCP))
+        else:
+            self.currCP = currCP
+        self.currCP = currCP
         self.level = level
         self.candy = candy
         self.moveName = moveName
