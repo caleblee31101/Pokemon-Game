@@ -1,18 +1,14 @@
 from Database import Database
 from Trainer import Trainer
 from Game import Game
+import random
 
 db = Database("PokeList_v2-1.csv")
-starter = db.at(5)
+random_poker = random.randint(0, 150)
+starter = db.at(random_poker)
 #print(starter)
 #print(starter.getName())
 player = Trainer('Caleb', starter)
-player.addPokemon(db.at(6))
-player.addPokemon(db.at(7))
-player.addPokemon(db.at(8))
-player.addPokemon(db.at(9))
-player.addPokemon(db.at(10))
-player.addPokemon(db.at(11))
 game = Game(db, player)
 game.runState(0)
 userInput = input('>> ')

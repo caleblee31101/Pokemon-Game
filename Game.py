@@ -92,7 +92,13 @@ class Game:
             pokemon = self.__player.getHandPokemon()
             pokemon_needs = [pokemon.name, pokemon.currCP, pokemon.level, pokemon.moveName, pokemon.moveDMG,
                              pokemon.evolutionNum, pokemon.pokeType]
-            result = minigame(pokemon_needs)
+            g = 0
+            while g == 0:
+                try:
+                    result = minigame(pokemon_needs)
+                    g += 1
+                except:
+                    print('The Pokemon you were fighting has left the battle \n')
 
             if result:
                 new_pok = Pokemon(result[0], result[1], result[2], result[3], result[4], result[5], result[6],

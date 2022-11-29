@@ -34,7 +34,7 @@ def attack(attacker, defender):
     """Takes an attacking pokemon and a defending pokemon (which are both in the form a of a list with stats)
     Returns the health of the defending pokemon.
     """
-    defender[0] -= random.randint(attacker[4] - 6, attacker[4] + 6)
+    defender[0] -= random.randint(attacker[4], attacker[4] + 6)
     return defender[0]
 
 
@@ -122,14 +122,20 @@ def minigame(current_pokemon):
 
     random_pokemon = [int(random_pokcp / 2), random_pok[0], random_pok[1], random_pok[4], random_pok[5],
                       random_pok[7], int(random_pokcp / 2)]
+    current_modifier = ''
+    random_modifier = ''
     if random_pokemon[5] in weaknesses[current_pokemon[5]]:
-        random_pokemon[4] *= 1.5
+        random_pokemon[4] = int(random_pokemon[4] * 1.5)
+        random_modifier = '\nIt\'s super effective!'
     if current_pokemon[5] in weaknesses[random_pokemon[5]]:
-        current_pokemon[4] *= 1.5
+        current_pokemon[4] = int(current_pokemon[4] * 1.5)
+        current_modifier = '\nIt\'s super effective!'
     if random_pokemon[5] in resistances[current_pokemon[5]]:
-        random_pokemon[4] *= .75
+        random_pokemon[4] = int(random_pokemon[4] * .75)
+        random_modifier = '\nIt\'s not very effective ...'
     if current_pokemon[5] in resistances[random_pokemon[5]]:
-        current_pokemon[4] *= .75
+        current_pokemon[4] = int(current_pokemon[4] * .75)
+        current_modifier = '\nIt\'s not very effective ...'
     z = 0
     i = 0
     print(current_pokemon[1], 'vs', random_pokemon[1])
@@ -147,7 +153,7 @@ def minigame(current_pokemon):
                     user = input('>>')
                     if user == '1':
                         random_pokemon[0] = attack(current_pokemon, random_pokemon)
-                        print(f'{current_pokemon[1]} used {current_pokemon[3]} on {random_pokemon[1]}')
+                        print(f'{current_pokemon[1]} used {current_pokemon[3]} on {random_pokemon[1]} {current_modifier}')
                         i += 1
                         x += 1
                         if random_pokemon[0] <= 0:
@@ -171,7 +177,7 @@ def minigame(current_pokemon):
                     print('Invalid input try again')
         else:
             attack(random_pokemon, current_pokemon)
-            print(f'{random_pokemon[1]} used {random_pokemon[3]} on {current_pokemon[1]}')
+            print(f'{random_pokemon[1]} used {random_pokemon[3]} on {current_pokemon[1]} {random_modifier}')
             i += 1
             if current_pokemon[0] <= 0:
                 current_pokemon[0] = 0
