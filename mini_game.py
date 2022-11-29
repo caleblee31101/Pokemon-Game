@@ -69,7 +69,48 @@ def minigame(current_pokemon):
 
     dataList = data_modifier()
 
-    # weaknesses = {'Grass': 'Fire', 'Fire': 'Water'}
+    # Tbh idk if it was worth typing this in but whatever.
+
+    # Weakness: Defender is the key, if attacker is in the list of types then damage is amplified
+    # Resistance: Defender is the key if the attacker is in the list of types, then damage is reduced
+    weaknesses = {'Normal': ['Fighting'],
+                  'Fire': ['Water', 'Ground', 'Rock'],
+                  'Water': ['Grass', 'Electric'],
+                  'Grass': ['Fire', 'Ice', 'Poison', 'Flying', 'Bug'],
+                  'Electric': ['Ground'],
+                  'Ice': ['Fire', 'Fighting', 'Rock', 'Steel'],
+                  'Fighting': ['Flying', 'Psychic', 'Fairy'],
+                  'Poison': ['Ground', 'Psychic'],
+                  'Ground': ['Water', 'Grass', 'Ice'],
+                  'Flying': ['Electric', 'Ice', 'Rock'],
+                  'Psychic': ['Bug', 'Ghost', 'Dark'],
+                  'Bug': ['Fire', 'Flying', 'Rock'],
+                  'Rock': ['Water', 'Grass', 'Fighting', 'Ground', 'Steel'],
+                  'Ghost': ['Ghost', 'Dark'],
+                  'Dragon': ['Ice', 'Dragon', 'Fairy'],
+                  'Dark': ['Fighting', 'Bug', 'Fairy'],
+                  'Steel': ['Fire', 'Fighting', 'Ground'],
+                  'Fairy': ['Poison', 'Steel']}
+
+    resistances = {'Normal': [],
+                   'Fire': ['Fire', 'Grass', 'Ice', 'Bug', 'Steel', 'Fairy'],
+                   'Water': ['Fire', 'Water', 'Ice', 'Steel'],
+                   'Grass': ['Water', 'Grass', 'Electric', 'Ground'],
+                   'Electric': ['Electric', 'Flying', 'Steel'],
+                   'Ice': ['Ice'],
+                   'Fighting': ['Bug', 'Rock', 'Dark'],
+                   'Poison': ['Grass', 'Fighting', 'Poison', 'Bug', 'Fairy'],
+                   'Ground': ['Poison', 'Rock'],
+                   'Flying': ['Grass', 'Fighting', 'Bug'],
+                   'Psychic': ['Fighting', 'Psychic'],
+                   'Bug': ['Grass', 'Fighting', 'Ground'],
+                   'Rock': ['Normal', 'Fire', 'Poison', 'Flying'],
+                   'Ghost': ['Poison', 'Bug'],
+                   'Dragon': ['Fire', 'Water', 'Grass', 'Electric'],
+                   'Dark': ['Ghost', 'Dark'],
+                   'Steel': ['Normal', 'Grass', 'Ice', 'Flying', 'Psychic', 'Bug', 'Rock', 'Dragon', 'Steel', 'Fairy'],
+                   'Fairy': ['Fighting', 'Bug', 'Dark']}
+
     my_pokemon = current_pokemon
     random_pok = dataList[random.randint(0, 150)]
     random_pokcp = random.randint(random_pok[1], random_pok[2])
@@ -81,10 +122,14 @@ def minigame(current_pokemon):
 
     random_pokemon = [int(random_pokcp / 2), random_pok[0], random_pok[1], random_pok[4], random_pok[5],
                       random_pok[7], int(random_pokcp / 2)]
-    # if weaknesses[current_pokemon[5]] == random_pokemon[5]:
-    #     random_pokemon[4] *= 1.5
-    # if weaknesses[random_pokemon[5]] == current_pokemon[5]:
-    #     current_pokemon[4] *= 1.5
+    if random_pokemon[5] in weaknesses[current_pokemon[5]]:
+        random_pokemon[4] *= 1.5
+    if current_pokemon[5] in weaknesses[random_pokemon[5]]:
+        current_pokemon[4] *= 1.5
+    if random_pokemon[5] in resistances[current_pokemon[5]]:
+        random_pokemon[4] *= .75
+    if current_pokemon[5] in resistances[random_pokemon[5]]:
+        current_pokemon[4] *= .75
     z = 0
     i = 0
     print(current_pokemon[1], 'vs', random_pokemon[1])
