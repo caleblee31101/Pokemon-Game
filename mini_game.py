@@ -1,7 +1,7 @@
 import random
 import csv
 
-
+#  For testing purposes my_pok = ['Caleb', 900, 0, 'C++', 90, 23, 'Steel']
 def data_modifier():
     """Takes the data from the PokeList and transforms it into a form that is more effiecient for battle and only
     includes stats that are necessary for battle
@@ -28,7 +28,7 @@ def data_modifier():
                     pokemon[3] = int(pokemon[3])
                     pokemon[5] = int(pokemon[5])
         return available_pokemon
-
+    name, minCP, maxCP, level, candy, moveName, moveDMG, evolutionNum, pokeType, currCP
 
 def attack(attacker, defender):
     """Takes an attacking pokemon and a defending pokemon (which are both in the form a of a list with stats)
@@ -43,9 +43,49 @@ def heal(attacker):
     Heals the pokemon based on their health and a random number
     Returns the new HP of that pokemon
     """
-    attacker[0] += random.randint(int(attacker[6]/3), int(attacker[6]/2.5))
+    attacker[0] += random.randint(int(attacker[6]/2.5), int(attacker[6]/2))
     return attacker[0]
 
+
+def critical_attack(attacker, defender):
+    """
+    Takes the parameter of attacker and defender, asks a python question to the user, if they answer correctly deals a
+    critical blow to the enemy, if not the attack does no damage
+    :param attacker:
+    :param defender:
+    :return:
+    """
+    correct = False
+    qas = {'A bit can only have the value of 0 and 1': '1', 'Memory stores bits.': '1',
+           'Lists are not mutable': '0', 'Values in dictionaries can be called using []': '0',
+           'Tuples are mutable': '0', 'Lists can be concatenated with the + operator': '1',
+           'The first element in a list is called with the index [1]': '0',
+           'The first element in a list is called with the index [0]': '1', 'Lists are mutable': '1',
+           'A function has a max of 5 parameters': '0',
+           'Local variables are defined in a function': '1',
+           'Global variables are the preferred type of variable': '0',
+           'The global namespace is evaluated before the built-in namespace': '1',
+           'The global namespace is evaluated after the built-in namespace': '0',
+           'It is impossible to return more than one VALUE with a function': '0',
+           'It is impossible to return more than one OBJECT with a function': '1'}
+    question_list = []
+    for x in qas:
+        question_list.append(x)
+    question = random.randint(0, len(question_list))
+    correct = False
+    answer = input(f'{question_list[question]}\nEnter 0 for False\n1 for True\n>> ')
+    while answer != '0' and answer != '1':
+        answer = input('Enter 0 for False\n1 for True\n>> ')
+
+    # Checks if the answer to the question is correct or not
+    if answer == qas[question_list[question]]:
+        correct = True
+    # Either returns double damage or 0 damage depending on the answer.
+    if correct:
+        defender[0] -= 2 * (random.randint(attacker[4], attacker[4] + 6))
+        return defender[0]
+    else:
+        return False
 
 def health_printer(user, rando):
     """Takes input of both the pokemon that are battling (again in their list form)
@@ -125,16 +165,16 @@ def minigame(current_pokemon):
     current_modifier = ''
     random_modifier = ''
     if random_pokemon[5] in weaknesses[current_pokemon[5]]:
-        random_pokemon[4] = int(random_pokemon[4] * 1.5)
+        random_pokemon[4] = int(random_pokemon[4] * 1.87)
         random_modifier = '\nIt\'s super effective!'
     if current_pokemon[5] in weaknesses[random_pokemon[5]]:
-        current_pokemon[4] = int(current_pokemon[4] * 1.5)
+        current_pokemon[4] = int(current_pokemon[4] * 1.87)
         current_modifier = '\nIt\'s super effective!'
     if random_pokemon[5] in resistances[current_pokemon[5]]:
-        random_pokemon[4] = int(random_pokemon[4] * .75)
+        random_pokemon[4] = int(random_pokemon[4] * .65)
         random_modifier = '\nIt\'s not very effective ...'
     if current_pokemon[5] in resistances[random_pokemon[5]]:
-        current_pokemon[4] = int(current_pokemon[4] * .75)
+        current_pokemon[4] = int(current_pokemon[4] * .65)
         current_modifier = '\nIt\'s not very effective ...'
     z = 0
     i = 0
@@ -145,8 +185,9 @@ def minigame(current_pokemon):
     while z == 0:  # cp/5] > 0 and random_pokemon[0] > 0:
         if i % 2 == 0:
             print('Choose your move:\n'
-                  '1. Attack\n'
-                  '2. Heal\n')
+                  '1. Attack (Guaranteed basic damage)\n'
+                  '2. Heal (Pokemon recovers some hp)\n'
+                  '3. Special Attack (Answer a python question for a chance at double damage, but risk a miss)\n')
             x = 0
             while x == 0:
                 try:
@@ -171,6 +212,20 @@ def minigame(current_pokemon):
                             random_pokemon[0] = 0
                             z += 1
                         health_printer(current_pokemon, random_pokemon)
+                    elif user == '3':
+                        new_hp = critical_attack(current_pokemon, random_pokemon)
+                        if new_hp:
+                            random_pokemon[0] = new_hp
+                            print(f'{current_pokemon[1]} used SPECIAL {current_pokemon[3]} on {random_pokemon[1]} {current_modifier}')
+                        else:
+                            print(f'Incorrect, {current_pokemon[1]} missed.')
+                        i += 1
+                        x += 1
+                        if random_pokemon[0] <= 0:
+                            random_pokemon[0] = 0
+                            z += 1
+                        health_printer(current_pokemon, random_pokemon)
+                        print('\n')
                     else:
                         print('Invalid input try again')
                 except TypeError:
@@ -195,6 +250,7 @@ def minigame(current_pokemon):
 
 
 def candy_gen():
+    '''No input, returns a number, 3, 5, or 10 which is the amount of candies that the player recieves after a win.'''
     x = random.randint(0, 2)
     if x == 0:
         x = 3
@@ -206,6 +262,12 @@ def candy_gen():
 
 
 def level_up(candies, level):
+    """
+
+    :param candies:
+    :param level:
+    :return: Stat buffs, new level and new candy count
+    """
     x = 1
     buff = 0
     while x == 1:
